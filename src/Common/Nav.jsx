@@ -1,9 +1,11 @@
-import React from 'react'
-import { assets } from '../utils/assets'
+import React, { useContext } from 'react'
+import { assets } from '../Utils/Assets'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { MusicContext } from '../Context/PlayerContext'
 
 const Nav = () => {
 
+    const { displayName, isPremiumUser } = useContext(MusicContext);
     const navigate = useNavigate();
     const url = useLocation();
     const isActive = (path) => url.pathname === path;
@@ -28,9 +30,9 @@ const Nav = () => {
                     className={`lg:hidden w-8 cursor-pointer ${isActive('/search') ? 'text-white' : 'text-[#b3b3b3] opacity-50'}`}
                     onClick={() => navigate('/search')}
                 />
-                <button className='hidden sm:flex rounded-full px-4 py-1 text-[15px] cursor-pointer text-black bg-white hover:-translate-y-0.5'>
+                {!isPremiumUser && <button className='hidden sm:flex rounded-full px-4 py-1 text-[15px] cursor-pointer text-black bg-white hover:-translate-y-0.5'>
                     Explore Premium
-                </button>
+                </button>}
                 <button className='hidden sm:flex rounded-full px-3 py-1 text-[15px] cursor-pointer text-white bg-[#0E0E0E] hover:-translate-y-0.5'>
                     Install App
                 </button>
@@ -39,7 +41,7 @@ const Nav = () => {
                     className='w-8 bg-[#0E0E0E] p-2 rounded-2xl cursor-pointer hover:-translate-y-0.5'
                 />
                 <p className='bg-blue-500 text-black w-8 h-8 rounded-full flex items-center justify-center cursor-pointer'>
-                    V
+                    {displayName}
                 </p>
             </div>
         </div>

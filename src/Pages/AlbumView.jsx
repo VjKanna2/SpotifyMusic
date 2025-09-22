@@ -1,18 +1,18 @@
 import React, { useContext } from 'react'
-import Nav from './Nav'
+import Nav from '../Common/Nav'
 import { useParams } from 'react-router-dom'
-import { albumsData, assets, songsData } from '../utils/assets'
-import { MusicContext } from '../context/PlayerContext'
+import { albumsData, assets, songsData } from '../Utils/Assets'
+import { MusicContext } from '../Context/PlayerContext'
 
 const AlbumView = () => {
 
     const { id } = useParams();
     const currentAlbum = albumsData[id];
     const { playSpecific } = useContext(MusicContext);
-    // const bgColor = `linear-gradient(${currentAlbum.bgColor}, #121212)` ,  style={{background: bgColor}}
+    const bgColor = `linear-gradient(${currentAlbum.bgColor}, #121212)`
 
     return (
-        <div className='px-6 pt-4'>
+        <div className='px-6 pt-4' style={{ background: bgColor }}>
             <Nav />
             <div className='mt-10 flex gap-8 flex-col items-center sm:flex-row md:items-end'>
                 <img className='w-36 sm:w-40 rounded ' src={currentAlbum.image} />

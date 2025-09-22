@@ -1,5 +1,5 @@
 import React from 'react'
-import { assets } from '../utils/assets.jsx'
+import { assets } from '../Utils/Assets.jsx'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 const SideBar = () => {

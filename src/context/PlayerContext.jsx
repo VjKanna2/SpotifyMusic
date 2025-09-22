@@ -1,5 +1,7 @@
 import React, { createContext, useEffect, useRef, useState } from 'react'
-import { songsData } from '../utils/assets'
+import { songsData } from '../Utils/Assets'
+import { addLogOutFunc } from '../Utils/AuthHandlers';
+import { POST } from '../Utils/ApiCall';
 
 export const MusicContext = createContext();
 
@@ -8,6 +10,16 @@ const PlayerContext = (props) => {
     const audioRef = useRef();
     const seekBg = useRef();
     const seekBar = useRef();
+
+    const [displayName, setDisplayName] = useState('V');
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isPremiumUser, setIsPremiumUser] = useState(false);
+    const [deviceInfo, setDeviceInfo] = useState({
+        device: "Unknown",
+        os: "Unknown",
+    });
+    const [deviceId, setDeviceId] = useState(null);
+    const [isLocal, setIsLocal] = useState(true);
 
     const [song, setSong] = useState(songsData[0]);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -21,6 +33,32 @@ const PlayerContext = (props) => {
             minute: 0
         }
     });
+
+    useEffect(() => {
+        const userAgent = navigator.userAgent.toLowerCase();
+
+        let device = "Desktop";
+        if (/mobile/.test(userAgent)) device = "Mobile";
+        else if (/tablet|ipad|playbook|tab/.test(userAgent)) device = "Tablet";
+
+        let os = "Unknown";
+        if (/android/.test(userAgent)) os = "Android";
+        else if (/iphone|ipad|ipod/.test(userAgent)) os = "iOS";
+        else if (/windows/.test(userAgent)) os = "Windows";
+        else if (/macintosh|mac os x/.test(userAgent)) os = "MacOS";
+
+        setDeviceInfo({ device, os });
+    }, []);
+
+    const logOut = () => {
+        setDisplayName('V');
+        setIsLoggedIn(false);
+        window.location.reload();
+    }
+
+    useEffect(() => {
+        addLogOutFunc(logOut);
+    }, []);
 
     // for song duration and seekbar
     useEffect(() => {
@@ -43,23 +81,52 @@ const PlayerContext = (props) => {
         }, 1000)
     }, [audioRef]);
 
+    const handleTracks = async (action, url) => {
+        try {
+            const payload = {
+                type: action,
+                deviceId: deviceId,
+                trackUrl: url ? url : null
+            }
+            const response = await POST('spotify/handleSong', payload)
+            if (response.error == null) {
+                setIsLocal(false);
+                setIsPlaying(action == 'play' ? true : false);
+            }
+        } catch (error) {
+            console.error(`Error While ${action}`, error);
+        }
+    }
+
     // play
-    const play = () => {
+    const play = (type) => {
+        if (type === 'premium') {
+            handleTracks('play');
+            return;
+        }
         audioRef.current.play()
         setIsPlaying(true)
     }
 
     // pause
-    const pause = () => {
+    const pause = (type) => {
+        if (type === 'premium') {
+            handleTracks('pause');
+            return;
+        }
         audioRef.current.pause()
-        setIsPlaying(false)
+        setIsPlaying(false);
     }
 
     // select specific
-    const playSpecific = async (id) => {
+    const playSpecific = async (id, url) => {
+        if (id === 'premium') {
+            await handleTracks('play', url);
+            return;
+        }
         await setSong(songsData[id])
         audioRef.current.play()
-        setIsPlaying(true)
+        setIsPlaying(true);
     }
 
     // previous
@@ -67,7 +134,7 @@ const PlayerContext = (props) => {
         if (song.id > 0) {
             await setSong(songsData[id - 1])
             audioRef.current.play()
-            setIsPlaying(true)
+            setIsPlaying(true);
         }
     }
 
@@ -76,7 +143,7 @@ const PlayerContext = (props) => {
         if (song.id < songsData.length - 1) {
             await setSong(songsData[id + 1])
             audioRef.current.play()
-            setIsPlaying(true)
+            setIsPlaying(true);
         }
     }
 
@@ -85,10 +152,17 @@ const PlayerContext = (props) => {
         audioRef.current.currentTime = ((e.nativeEvent.offsetX / seekBg.current.offsetWidth) * audioRef.current.duration)
     }
 
+    const { device, os } = deviceInfo;
     const contextValue = {
         audioRef,
         seekBg,
         seekBar,
+        displayName, setDisplayName,
+        isLoggedIn, setIsLoggedIn,
+        isPremiumUser, setIsPremiumUser,
+        device, os,
+        deviceId, setDeviceId,
+        isLocal,
         song, setSong,
         isPlaying, setIsPlaying,
         duration, setDuration,

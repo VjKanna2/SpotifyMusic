@@ -1,6 +1,6 @@
 import React from 'react'
-import Nav from './Nav'
-import Nav2 from './Nav2'
+import Nav from '../Common/Nav'
+import Nav2 from '../Common/Nav2'
 
 const Podcasts = () => {
     return (

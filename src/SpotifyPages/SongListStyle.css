@@ -1,0 +1,21 @@
+.marquee-text {
+    white-space: nowrap;
+    display: inline-block;
+}
+
+@media (max-width: 830px) {
+    .songDiv:hover .marquee-text {
+        padding-left: 5%;
+        animation: marquee 14s linear infinite;
+    }
+
+    @keyframes marquee {
+        0% {
+            transform: translateX(0);
+        }
+
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+}

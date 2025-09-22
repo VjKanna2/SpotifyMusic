@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { MusicContext } from '../context/PlayerContext'
+import { MusicContext } from '../Context/PlayerContext'
 
 const Songs = ({ image, name, desc, id }) => {
 
