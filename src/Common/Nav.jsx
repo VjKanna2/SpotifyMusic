@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { assets } from '../utils/Assets'
+import { assets } from '../utils/assets'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { MusicContext } from '../context/PlayerContext'
 

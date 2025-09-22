@@ -1,7 +1,7 @@
 import React from 'react'
 import Nav from '../Common/Nav'
 import Nav2 from '../Common/Nav2'
-import { songsData } from '../utils/Assets'
+import { songsData } from '../utils/assets'
 import Songs from '../Common/Songs'
 
 const Music = () => {

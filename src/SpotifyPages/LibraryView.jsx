@@ -1,6 +1,6 @@
 import React, { useContext, useMemo, useState } from 'react'
 import Nav from '../Common/Nav'
-import { assets } from '../utils/Assets'
+import { assets } from '../utils/assets'
 import { useLocation, useParams } from 'react-router-dom'
 import { formatSongDuration } from '../utils/Functions'
 import { MusicContext } from '../context/PlayerContext'

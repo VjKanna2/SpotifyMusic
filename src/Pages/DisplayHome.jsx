@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Nav from '../Common/Nav'
-import { albumsData, songsData } from '../utils/Assets'
+import { albumsData, songsData } from '../utils/assets'
 import Albums from '../Common/Albums'
 import Songs from '../Common/Songs'
 import Nav2 from '../Common/Nav2'

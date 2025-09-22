@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import Nav from '../Common/Nav'
-import { assets } from '../utils/Assets'
+import { assets } from '../utils/assets'
 import Login from '../SpotifyPages/Login'
 import { MusicContext } from '../context/PlayerContext'
 import { GET, POST } from '../utils/ApiCall'

@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useRef, useState } from 'react'
-import { songsData } from '../utils/Assets'
+import { songsData } from '../utils/assets'
 import { addLogOutFunc } from '../utils/AuthHandlers';
 import { POST } from '../utils/ApiCall';
 
