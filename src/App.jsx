@@ -4,11 +4,11 @@ import SideBar from './SideBar/SideBar'
 import DisplayHome from './Pages/DisplayHome'
 import AlbumView from './Pages/AlbumView'
 import Search from './Pages/Search'
-import { albumsData } from './Utils/Assets'
+import { albumsData } from './utils/Assets'
 import Music from './Pages/Music'
 import Podcasts from './Pages/Podcasts'
 import MusicPlayer from './Player/MusicPlayer'
-import { MusicContext } from './Context/PlayerContext'
+import { MusicContext } from './context/PlayerContext'
 import LibraryView from './SpotifyPages/LibraryView'
 
 const App = () => {

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { AUTH_URL } from '../Utils/Urls'
+import { AUTH_URL } from '../utils/Urls'
 
 const Login = () => {
     return (

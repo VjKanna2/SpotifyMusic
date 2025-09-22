@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import Nav from '../Common/Nav'
 import { useParams } from 'react-router-dom'
-import { albumsData, assets, songsData } from '../Utils/Assets'
-import { MusicContext } from '../Context/PlayerContext'
+import { albumsData, assets, songsData } from '../utils/Assets'
+import { MusicContext } from '../context/PlayerContext'
 
 const AlbumView = () => {
 

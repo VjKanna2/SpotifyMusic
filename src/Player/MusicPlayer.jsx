@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
-import { assets } from '../Utils/Assets'
-import { MusicContext } from '../Context/PlayerContext'
+import { assets } from '../utils/Assets'
+import { MusicContext } from '../context/PlayerContext'
 
 const MusicPlayer = () => {
 

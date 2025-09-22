@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import Nav from '../Common/Nav'
-import { assets } from '../Utils/Assets'
+import { assets } from '../utils/Assets'
 import Login from '../SpotifyPages/Login'
-import { MusicContext } from '../Context/PlayerContext'
-import { GET, POST } from '../Utils/ApiCall'
+import { MusicContext } from '../context/PlayerContext'
+import { GET, POST } from '../utils/ApiCall'
 import SongList from '../SpotifyPages/SongList'
 
 const Search = () => {

@@ -1,9 +1,9 @@
 import React, { useContext, useMemo, useState } from 'react'
 import Nav from '../Common/Nav'
-import { assets } from '../Utils/Assets'
+import { assets } from '../utils/Assets'
 import { useLocation, useParams } from 'react-router-dom'
-import { formatSongDuration } from '../Utils/Functions'
-import { MusicContext } from '../Context/PlayerContext'
+import { formatSongDuration } from '../utils/Functions'
+import { MusicContext } from '../context/PlayerContext'
 
 const LibraryView = () => {
 

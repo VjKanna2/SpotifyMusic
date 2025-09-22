@@ -1,7 +1,7 @@
 import React, { createContext, useEffect, useRef, useState } from 'react'
-import { songsData } from '../Utils/Assets'
-import { addLogOutFunc } from '../Utils/AuthHandlers';
-import { POST } from '../Utils/ApiCall';
+import { songsData } from '../utils/Assets'
+import { addLogOutFunc } from '../utils/AuthHandlers';
+import { POST } from '../utils/ApiCall';
 
 export const MusicContext = createContext();
 

@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
-import { assets } from '../Utils/Assets'
+import { assets } from '../utils/Assets'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { MusicContext } from '../Context/PlayerContext'
+import { MusicContext } from '../context/PlayerContext'
 
 const Nav = () => {
 

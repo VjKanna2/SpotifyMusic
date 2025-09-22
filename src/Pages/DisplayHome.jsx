@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react'
 import Nav from '../Common/Nav'
-import { albumsData, songsData } from '../Utils/Assets'
+import { albumsData, songsData } from '../utils/Assets'
 import Albums from '../Common/Albums'
 import Songs from '../Common/Songs'
 import Nav2 from '../Common/Nav2'
-import { GET } from '../Utils/ApiCall'
-import { MusicContext } from '../Context/PlayerContext'
+import { GET } from '../utils/ApiCall'
+import { MusicContext } from '../context/PlayerContext'
 import Library from '../SpotifyPages/Library'
 
 const DisplayHome = () => {
