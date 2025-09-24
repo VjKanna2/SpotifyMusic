@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { AUTH_URL } from '../utils/Urls'
+import { assets } from '../utils/assets'
 
 const Login = () => {
     return (
@@ -8,12 +9,12 @@ const Login = () => {
                 href={AUTH_URL}
             >
                 <img
-                    src="../../public/assets/Icons/SpotifyLogo.png"
+                    src={assets.loginSpotify}
                     className="mr-3 transition-opacity duration-500 opacity-100 group-hover:opacity-0 absolute left-3"
                     style={{ width: '26px' }}
                 />
                 <img
-                    src="../../public/assets/Icons/SpotifyBlack.png"
+                    src={assets.loginSpotifyBlack}
                     className="mr-3 transition-opacity duration-500 opacity-0 group-hover:opacity-100 absolute left-3"
                     style={{ width: '26px' }}
                 />

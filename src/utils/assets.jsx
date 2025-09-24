@@ -22,6 +22,8 @@ import arrow_right from '/assets/Icons/right_arrow.png'
 import arrow_left from '/assets/Icons/left_arrow.png'
 import spotify_logo from '/assets/Icons/spotify_logo.png'
 import clock_icon from '/assets/Icons/clock_icon.png'
+import loginSpotify from '/assets/Icons/login-spotify.png'
+import loginSpotifyBlack from '/assets/Icons/login-spotify-black.png'
 
 import cover1 from '/assets/SpotifyAlbum/img1.jpg'
 import cover2 from '/assets/SpotifyAlbum/img2.jpg'
@@ -81,7 +83,9 @@ export const assets = {
     arrow_left,
     arrow_right,
     spotify_logo,
-    clock_icon
+    clock_icon,
+    loginSpotify,
+    loginSpotifyBlack
 }
 
 export const albumsData = [
