@@ -1,6 +1,7 @@
 import React from 'react'
 import InfiniteScroll from '../Common/InfiniteScroll'
 import './SongListStyle.css'
+import { assets } from '../utils/assets'
 
 const SongList = ({ tracks, isPremiumUser, device, playSpecific }) => {
     return (
@@ -27,11 +28,11 @@ const SongList = ({ tracks, isPremiumUser, device, playSpecific }) => {
                     <div className='flex absolute right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500'>
                         {isPremiumUser ?
                             <a href={track.link} target="_blank" className='p-2 bg-[#1ED760] rounded-full ml-3'>
-                                <img src='../../public/assets/Icons/play.png' style={{ width: '30px' }} />
+                                <img src={assets.premiumPlay} style={{ width: '30px' }} />
                             </a>
                             :
                             <a onClick={() => playSpecific('premium', track.play)} href={track.link} target="_blank" className='p-2 bg-[#1ED760] rounded-full'>
-                                <img src="../../public/assets/Icons/SpotifyBlack.png" style={{ width: '30px' }} />
+                                <img src={assets.loginSpotifyBlack} style={{ width: '30px' }} />
                             </a>
                         }
                     </div>
