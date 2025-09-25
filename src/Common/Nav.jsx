@@ -3,6 +3,7 @@ import { assets } from '../utils/assets'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { MusicContext } from '../context/PlayerContext'
 import { POST } from '../utils/ApiCall'
+import { ForceLogout } from '../utils/AuthHandlers'
 
 const Nav = () => {
 
@@ -15,7 +16,7 @@ const Nav = () => {
         try {
             const response = await POST('auth/logout')
             if (response.result !== null && response.result.data?.Status == 'Logged Out Successfully') {
-                window.location.reload();
+                ForceLogout();
             }
         } catch (error) {
             console.error('Error While Logout :', error);
