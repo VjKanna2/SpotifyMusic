@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef  } from 'react'
+import React, { useContext, useEffect, useRef } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom'
 import SideBar from './SideBar/SideBar'
 import DisplayHome from './Pages/DisplayHome'
@@ -10,6 +10,7 @@ import Podcasts from './Pages/Podcasts'
 import MusicPlayer from './Player/MusicPlayer'
 import { MusicContext } from './context/PlayerContext'
 import LibraryView from './SpotifyPages/LibraryView'
+import Error404 from './Pages/404'
 
 const App = () => {
 
@@ -41,6 +42,7 @@ const App = () => {
                         <Route path='/search' element={<Search />} />
                         <Route path='/music' element={<Music />} />
                         <Route path='/podcasts' element={<Podcasts />} />
+                        <Route path="/404" element={<Error404 />} />
                     </Routes>
                 </div>
             </div>
