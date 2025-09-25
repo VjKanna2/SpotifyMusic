@@ -2,13 +2,25 @@ import React, { useContext } from 'react'
 import { assets } from '../utils/assets'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { MusicContext } from '../context/PlayerContext'
+import { POST } from '../utils/ApiCall'
 
 const Nav = () => {
 
-    const { displayName, isPremiumUser } = useContext(MusicContext);
+    const { isLoggedIn, displayName, isPremiumUser } = useContext(MusicContext);
     const navigate = useNavigate();
     const url = useLocation();
     const isActive = (path) => url.pathname === path;
+
+    async function handleLogout() {
+        try {
+            const response = await POST('auth/logout')
+            if (response.result !== null && response.result.data?.Status == 'Logged Out Successfully') {
+                window.location.reload();
+            }
+        } catch (error) {
+            console.error('Error While Logout :', error);
+        }
+    }
 
     return (
         <div className='w-full flex justify-between items-center font-semibold'>
@@ -33,9 +45,11 @@ const Nav = () => {
                 {!isPremiumUser && <button className='hidden sm:flex rounded-full px-4 py-1 text-[15px] cursor-pointer text-black bg-white hover:-translate-y-0.5'>
                     Explore Premium
                 </button>}
-                <button className='hidden sm:flex rounded-full px-3 py-1 text-[15px] cursor-pointer text-white bg-[#0E0E0E] hover:-translate-y-0.5'>
-                    Install App
-                </button>
+                {isLoggedIn && <button className='hidden sm:flex rounded-full px-3 py-1 text-[15px] cursor-pointer text-white bg-[#0E0E0E] hover:-translate-y-0.5'
+                    onClick={handleLogout}
+                >
+                    Logout
+                </button>}
                 <img
                     src={assets.bell_icon}
                     className='w-8 bg-[#0E0E0E] p-2 rounded-2xl cursor-pointer hover:-translate-y-0.5'
