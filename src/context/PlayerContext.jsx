@@ -1,15 +1,22 @@
 import React, { createContext, useEffect, useRef, useState } from 'react'
 import { songsData } from '../utils/assets'
 import { addLogOutFunc } from '../utils/AuthHandlers';
-import { POST } from '../utils/ApiCall';
+import { GET, POST } from '../utils/ApiCall';
+import Loader from '../Common/Loader';
 
 export const MusicContext = createContext();
 
 const PlayerContext = (props) => {
 
+    const playerRef = useRef(null);
     const audioRef = useRef();
     const seekBg = useRef();
     const seekBar = useRef();
+
+    const [loadingCount, setLoadingCount] = useState(0);
+    const startLoading = () => setLoadingCount(prev => prev + 1);
+    const stopLoading = () => setLoadingCount(prev => Math.max(prev - 1, 0));
+    const isLoading = loadingCount > 0;
 
     const [displayName, setDisplayName] = useState('V');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -50,6 +57,94 @@ const PlayerContext = (props) => {
         setDeviceInfo({ device, os });
     }, []);
 
+    useEffect(() => {
+        isAuthenticated();
+    }, []);
+
+    const isAuthenticated = async () => {
+        try {
+            startLoading();
+            const response = await GET('auth/token');
+            if (response.result !== null && response.result?.data?.Status == 'Logged In') {
+                if (response.result?.data?.DisplayName?.length > 0) {
+                    const name = response.result.data.DisplayName.trim();
+                    let shortName = name;
+                    if (name.length < 3) {
+                        shortName = name;
+                    } else if (name.includes(' ')) {
+                        const parts = name.split(' ').filter(Boolean);
+                        if (parts.length >= 2) {
+                            shortName = parts[0][0] + parts[1][0];
+                        } else {
+                            shortName = parts[0][0];
+                        }
+                    } else {
+                        shortName = name[0];
+                    }
+                    setDisplayName(shortName.toUpperCase());
+                    if (response.result?.data?.Premium) {
+                        setUpSDK();
+                        setIsPremiumUser(response.result?.data?.Premium)
+                    }
+                }
+                setIsLoggedIn(true);
+            } else setIsLoggedIn(false);
+        } catch (error) {
+            console.error('Error Getting Login Info :', error);
+        } finally {
+            stopLoading();
+        }
+    }
+
+    const setUpSDK = async () => {
+        if (window.Spotify) {
+            initializePlayer();
+            return;
+        }
+
+        const script = document.createElement("script");
+        script.src = "https://sdk.scdn.co/spotify-player.js";
+        script.async = true;
+        document.body.appendChild(script);
+
+        window.onSpotifyWebPlaybackSDKReady = async () => {
+            initializePlayer();
+        }
+    }
+
+    const initializePlayer = async () => {
+        startLoading();
+        const response = await GET('auth/premiumFeature');
+        let token = ''
+        if (response.result !== null && response.result?.data?.Status == 'Success') {
+            token = response.result?.data?.Data
+        }
+
+        const player = new window.Spotify.Player({
+            name: 'Spotify Clone Web Player',
+            getOAuthToken: cb => { cb(token) },
+            volume: 0.75
+        });
+
+        playerRef.current = player
+
+        player.addListener("ready", ({ device_id }) => {
+            setDeviceId(device_id);
+            POST('auth/premiumFeature', { deviceId: device_id })
+        });
+
+        player.addListener("authentication_error", ({ message }) => {
+            console.error("Spotify auth error", message);
+        });
+
+        player.addListener("player_state_changed", state => {
+            console.log("Player state", state);
+        });
+
+        player.connect();
+        stopLoading();
+    }
+
     const logOut = () => {
         setDisplayName('V');
         setIsLoggedIn(false);
@@ -87,6 +182,7 @@ const PlayerContext = (props) => {
 
     const handleTracks = async (action, url) => {
         try {
+            startLoading();
             const payload = {
                 type: action,
                 deviceId: deviceId,
@@ -101,6 +197,8 @@ const PlayerContext = (props) => {
             }
         } catch (error) {
             console.error(`Error While ${action}`, error);
+        } finally {
+            stopLoading();
         }
     }
 
@@ -167,7 +265,7 @@ const PlayerContext = (props) => {
         isLoggedIn, setIsLoggedIn,
         isPremiumUser, setIsPremiumUser,
         device, os,
-        deviceId, setDeviceId,
+        startLoading, stopLoading,
         isLocal,
         song, setSong,
         isPlaying, setIsPlaying,
@@ -180,6 +278,7 @@ const PlayerContext = (props) => {
         <>
             <MusicContext.Provider value={contextValue}>
                 {props.children}
+                <Loader isLoading={isLoading} />
             </MusicContext.Provider>
         </>
     )

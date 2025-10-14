@@ -7,19 +7,22 @@ import { ForceLogout } from '../utils/AuthHandlers'
 
 const Nav = () => {
 
-    const { isLoggedIn, displayName, isPremiumUser } = useContext(MusicContext);
+    const { startLoading, stopLoading, isLoggedIn, displayName, isPremiumUser } = useContext(MusicContext);
     const navigate = useNavigate();
     const url = useLocation();
     const isActive = (path) => url.pathname === path;
 
     async function handleLogout() {
         try {
+            startLoading();
             const response = await POST('auth/logout')
             if (response.result !== null && response.result.data?.Status == 'Logged Out Successfully') {
                 ForceLogout();
             }
         } catch (error) {
             console.error('Error While Logout :', error);
+        } finally {
+            stopLoading();
         }
     }
 

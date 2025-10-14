@@ -1,24 +1,18 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Nav from '../Common/Nav'
 import { assets } from '../utils/assets'
 import Login from '../SpotifyPages/Login'
 import { MusicContext } from '../context/PlayerContext'
-import { GET, POST } from '../utils/ApiCall'
+import { POST } from '../utils/ApiCall'
 import SongList from '../SpotifyPages/SongList'
 
 const Search = () => {
 
-    const { isLoggedIn, setIsLoggedIn, setDisplayName, isPremiumUser, setIsPremiumUser, device, setDeviceId, playSpecific } = useContext(MusicContext);
+    const { isLoggedIn, isPremiumUser, device, playSpecific } = useContext(MusicContext);
 
     const [loading, setLoading] = useState(false);
     const [searchText, setSearchText] = useState('');
     const [tracks, setTracks] = useState(null);
-
-    const playerRef = useRef(null);
-
-    useEffect(() => {
-        isAuthenticated();
-    }, []);
 
     useEffect(() => {
         const apiCallDelay = setTimeout(() => {
@@ -27,38 +21,6 @@ const Search = () => {
         }, 1000);
         return () => clearTimeout(apiCallDelay);
     }, [searchText]);
-
-    const isAuthenticated = async () => {
-        try {
-            const response = await GET('auth/token');
-            if (response.result !== null && response.result?.data?.Status == 'Logged In') {
-                if (response.result?.data?.DisplayName?.length > 0) {
-                    const name = response.result.data.DisplayName.trim();
-                    let shortName = name;
-                    if (name.length < 3) {
-                        shortName = name;
-                    } else if (name.includes(' ')) {
-                        const parts = name.split(' ').filter(Boolean);
-                        if (parts.length >= 2) {
-                            shortName = parts[0][0] + parts[1][0];
-                        } else {
-                            shortName = parts[0][0];
-                        }
-                    } else {
-                        shortName = name[0];
-                    }
-                    setDisplayName(shortName.toUpperCase());
-                    if (response.result?.data?.Premium) {
-                        setSDK();
-                        setIsPremiumUser(response.result?.data?.Premium)
-                    }
-                }
-                setIsLoggedIn(true);
-            } else setIsLoggedIn(false);
-        } catch (error) {
-            console.error('Error Getting Login Info :', error);
-        }
-    }
 
     const searchSongs = async (value) => {
         try {
@@ -71,40 +33,6 @@ const Search = () => {
             console.error('Error While Getting Songs :', error)
         } finally {
             setLoading(false);
-        }
-    }
-
-    const setSDK = () => {
-        window.onSpotifyWebPlaybackSDKReady = async () => {
-
-            const response = await GET('auth/premiumFeature');
-            let token = ''
-            if (response.result !== null && response.result?.data?.Status == 'Success') {
-                token = response.result?.data?.Data
-            }
-
-            const player = new window.Spotify.Player({
-                name: 'Spotify Clone Web Player',
-                getOAuthToken: cb => { cb(token) },
-                volume: 0.75
-            });
-
-            playerRef.current = player
-
-            player.addListener("ready", ({ device_id }) => {
-                setDeviceId(device_id);
-                POST('auth/premiumFeature', { deviceId: device_id })
-            });
-
-            player.addListener("authentication_error", ({ message }) => {
-                console.error("Spotify auth error", message);
-            });
-
-            player.addListener("player_state_changed", state => {
-                console.log("Player state", state);
-            });
-
-            player.connect();
         }
     }
 

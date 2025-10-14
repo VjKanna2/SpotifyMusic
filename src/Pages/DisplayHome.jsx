@@ -10,53 +10,24 @@ import Library from '../SpotifyPages/Library'
 
 const DisplayHome = () => {
 
-    const { setDisplayName, isLoggedIn, setIsLoggedIn, setIsPremiumUser } = useContext(MusicContext);
+    const { isLoggedIn, startLoading, stopLoading } = useContext(MusicContext);
     const [library, setLibrary] = useState([]);
 
     useEffect(() => {
-        isAuthenticated();
-    }, []);
-
-    const isAuthenticated = async () => {
-        try {
-            const response = await GET('auth/token');
-            if (response.result !== null && response.result?.data?.Status == 'Logged In') {
-                if (response.result?.data?.DisplayName?.length > 0) {
-                    const name = response.result.data.DisplayName.trim();
-                    let shortName = name;
-                    if (name.length < 3) {
-                        shortName = name;
-                    } else if (name.includes(' ')) {
-                        const parts = name.split(' ').filter(Boolean);
-                        if (parts.length >= 2) {
-                            shortName = parts[0][0] + parts[1][0];
-                        } else {
-                            shortName = parts[0][0];
-                        }
-                    } else {
-                        shortName = name[0];
-                    }
-                    setDisplayName(shortName.toUpperCase());
-                    if (response.result?.data?.Premium) {
-                        setIsPremiumUser(response.result?.data?.Premium)
-                    }
-                }
-                setIsLoggedIn(true);
-                getAlbums();
-            } else setIsLoggedIn(false);
-        } catch (error) {
-            console.error('Error Getting Login Info :', error);
-        }
-    }
+        if (isLoggedIn) getAlbums();
+    }, [isLoggedIn]);
 
     const getAlbums = async () => {
         try {
+            startLoading();
             const response = await GET('spotify/get/albums');
             if (response.result !== null && response.result?.data?.Status == "Success") {
                 setLibrary(response.result?.data?.Data);
             }
         } catch (error) {
             console.error('Error Getting Albums :', error)
+        } finally {
+            stopLoading();
         }
     }
 
