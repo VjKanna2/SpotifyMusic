@@ -27,7 +27,7 @@ const SongList = ({ tracks, isPremiumUser, device, playSpecific }) => {
                     </div>
                     <div className='flex absolute right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-500'>
                         {isPremiumUser ?
-                            <a onClick={() => playSpecific('premium', track.play)} href={track.link} target="_blank" className='p-2 bg-[#1ED760] rounded-full ml-3'>
+                            <a onClick={() => playSpecific('premium', track.play)} target="_blank" className='p-2 cursor-pointer bg-[#1ED760] rounded-full ml-3'>
                                 <img src={assets.premiumPlay} style={{ width: '30px' }} />
                             </a>
                             :

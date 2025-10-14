@@ -57,7 +57,11 @@ const PlayerContext = (props) => {
     }
 
     useEffect(() => {
-        addLogOutFunc(logOut);
+        const removeLogOutFunc = addLogOutFunc(logOut);
+
+        return () => {
+            removeLogOutFunc();
+        }
     }, []);
 
     // for song duration and seekbar
@@ -90,8 +94,10 @@ const PlayerContext = (props) => {
             }
             const response = await POST('spotify/handleSong', payload)
             if (response.error == null) {
-                setIsLocal(false);
-                setIsPlaying(action == 'play' ? true : false);
+                if (response.result.data.Status == "Success") {
+                    setIsLocal(false);
+                    setIsPlaying(action !== 'pause' ? true : false);
+                }
             }
         } catch (error) {
             console.error(`Error While ${action}`, error);
@@ -99,19 +105,19 @@ const PlayerContext = (props) => {
     }
 
     // play
-    const play = (type) => {
+    const play = async (type) => {
         if (type === 'premium') {
-            handleTracks('play');
+            await handleTracks('resume');
             return;
         }
         audioRef.current.play()
-        setIsPlaying(true)
+        setIsPlaying(true);
     }
 
     // pause
-    const pause = (type) => {
+    const pause = async (type) => {
         if (type === 'premium') {
-            handleTracks('pause');
+            await handleTracks('pause');
             return;
         }
         audioRef.current.pause()

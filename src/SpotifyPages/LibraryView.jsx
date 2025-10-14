@@ -11,7 +11,7 @@ const LibraryView = () => {
     const url = useLocation();
     const { data } = url.state || {};
 
-    const { isPremiumUser } = useContext(MusicContext)
+    const { isPremiumUser, playSpecific } = useContext(MusicContext)
 
     const bgColor = `linear-gradient(#124D33, #121212)`
 
