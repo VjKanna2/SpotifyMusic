@@ -231,6 +231,7 @@ const PlayerContext = (props) => {
             await handleTracks('play', url);
             return;
         } else {
+            if (isPlaying && !isLocal) await handleTracks('pause');
             await setSong(songsData[id]);
             audioRef.current.play();
             setIsPlaying(true);
