@@ -18,13 +18,13 @@ const MusicPlayer = () => {
             <div className='flex-grow basis-[65%] flex flex-col items-center gap-1 m-auto'>
                 <div className='flex gap-4'>
                     <img className='w-4 cursor-pointer' src={assets.shuffle_icon} />
-                    <img onClick={() => prev(song.id)} className='w-4 cursor-pointer' src={assets.prev_icon} />
+                    {isLocal && <img onClick={() => prev(song.id)} className='w-4 cursor-pointer' src={assets.prev_icon} />}
                     {isPlaying ?
                         <img className='w-4 cursor-pointer' src={assets.pause_icon} onClick={() => pause(isLocal ? '' : 'premium')} />
                         :
                         <img className='w-4 cursor-pointer' src={assets.play_icon} onClick={() => play(isLocal ? '' : 'premium')} />
                     }
-                    <img onClick={() => next(song.id)} className='w-4 cursor-pointer' src={assets.next_icon} />
+                    {isLocal && <img onClick={() => next(song.id)} className='w-4 cursor-pointer' src={assets.next_icon} />}
                     <img className='w-4 cursor-pointer' src={assets.loop_icon} />
                 </div>
                 <div className="flex items-center gap-5">

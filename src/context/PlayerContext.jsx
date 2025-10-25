@@ -207,9 +207,10 @@ const PlayerContext = (props) => {
         if (type === 'premium') {
             await handleTracks('resume');
             return;
+        } else if (type == '' && isLocal) {
+            audioRef.current.play()
+            setIsPlaying(true);
         }
-        audioRef.current.play()
-        setIsPlaying(true);
     }
 
     // pause
@@ -217,9 +218,10 @@ const PlayerContext = (props) => {
         if (type === 'premium') {
             await handleTracks('pause');
             return;
+        } else if (type == '' && isLocal) {
+            audioRef.current.pause()
+            setIsPlaying(false);
         }
-        audioRef.current.pause()
-        setIsPlaying(false);
     }
 
     // select specific
@@ -227,15 +229,17 @@ const PlayerContext = (props) => {
         if (id === 'premium') {
             await handleTracks('play', url);
             return;
+        } else {
+            await setSong(songsData[id]);
+            audioRef.current.play();
+            setIsPlaying(true);
+            setIsLocal(true);
         }
-        await setSong(songsData[id])
-        audioRef.current.play()
-        setIsPlaying(true);
     }
 
     // previous
     const prev = async (id) => {
-        if (song.id > 0) {
+        if (song.id > 0 && isLocal) {
             await setSong(songsData[id - 1])
             audioRef.current.play()
             setIsPlaying(true);
@@ -244,7 +248,7 @@ const PlayerContext = (props) => {
 
     // next
     const next = async (id) => {
-        if (song.id < songsData.length - 1) {
+        if (song.id < songsData.length - 1 && isLocal) {
             await setSong(songsData[id + 1])
             audioRef.current.play()
             setIsPlaying(true);
