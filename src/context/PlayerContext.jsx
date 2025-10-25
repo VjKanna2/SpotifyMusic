@@ -120,15 +120,17 @@ const PlayerContext = (props) => {
     }
 
     const initializePlayer = async () => {
-        const response = await GET('auth/premiumFeature');
-        let token = ''
-        if (response.result !== null && response.result?.data?.Status == 'Success') {
-            token = response.result?.data?.Data
-        }
 
         const player = new window.Spotify.Player({
             name: 'Spotify Clone Web Player',
-            getOAuthToken: cb => { cb(token) },
+            getOAuthToken: async (cb) => {
+                const response = await GET('auth/premiumFeature');
+                let token = null;
+                if (response.result !== null && response.result?.data?.Status == 'Success') {
+                    token = response.result?.data?.Data;
+                }
+                cb(token);
+            },
             volume: 0.75
         });
 
@@ -189,7 +191,7 @@ const PlayerContext = (props) => {
     const handleTracks = async (action, url) => {
         try {
             startLoading();
-            if(isPlaying && isLocal) await pause('');
+            if (isPlaying && isLocal) await pause('');
             const payload = {
                 type: action,
                 deviceId: deviceId,
