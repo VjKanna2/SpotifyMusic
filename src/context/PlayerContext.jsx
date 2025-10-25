@@ -108,9 +108,14 @@ const PlayerContext = (props) => {
         document.body.appendChild(script);
 
         window.onSpotifyWebPlaybackSDKReady = async () => {
-            startLoading();
-            await initializePlayer();
-            stopLoading();
+            try {
+                startLoading();
+                await initializePlayer();
+            } catch (error) {
+                console.error("Error While Initializing Player", error);
+            } finally {
+                stopLoading();
+            }
         }
     }
 
@@ -184,6 +189,7 @@ const PlayerContext = (props) => {
     const handleTracks = async (action, url) => {
         try {
             startLoading();
+            if(isPlaying && isLocal) await pause('');
             const payload = {
                 type: action,
                 deviceId: deviceId,
