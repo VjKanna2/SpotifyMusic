@@ -108,12 +108,13 @@ const PlayerContext = (props) => {
         document.body.appendChild(script);
 
         window.onSpotifyWebPlaybackSDKReady = async () => {
-            initializePlayer();
+            startLoading();
+            await initializePlayer();
+            stopLoading();
         }
     }
 
     const initializePlayer = async () => {
-        startLoading();
         const response = await GET('auth/premiumFeature');
         let token = ''
         if (response.result !== null && response.result?.data?.Status == 'Success') {
@@ -139,10 +140,10 @@ const PlayerContext = (props) => {
 
         player.addListener("player_state_changed", state => {
             console.log("Player state", state);
+            setIsPlaying(!state.paused)
         });
 
         player.connect();
-        stopLoading();
     }
 
     const logOut = () => {
@@ -192,7 +193,7 @@ const PlayerContext = (props) => {
             if (response.error == null) {
                 if (response.result.data.Status == "Success") {
                     setIsLocal(false);
-                    setIsPlaying(action !== 'pause' ? true : false);
+                    // setIsPlaying(action !== 'pause' ? true : false);
                 }
             }
         } catch (error) {
